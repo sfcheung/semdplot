@@ -1,4 +1,4 @@
-# semdiagplot
+# semdplot
 
 This package is for generating diagnostic plost in structural
 equation modeling (SEM).
@@ -9,7 +9,7 @@ The latest development version at GitHub can be
 installed by `remotes::install_github()`:
 
 ```
-remotes::install_github("sfcheung/semdiagplot")
+remotes::install_github("sfcheung/semdplot")
 ```
 
 # Status

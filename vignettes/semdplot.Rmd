@@ -1,8 +1,8 @@
 ---
-title: "semdiagplot"
+title: "semdplot"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{semdiagplot}
+  %\VignetteIndexEntry{semdplot}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,5 +15,5 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(semdiagplot)
+library(semdplot)
 ```

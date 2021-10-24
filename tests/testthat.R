@@ -1,4 +1,4 @@
 library(testthat)
-library(semdiagplot)
+library(semdplot)
 
-test_check("semdiagplot")
+test_check("semdplot")

@@ -13,18 +13,10 @@
 This package is for generating diagnostic plots in structural
 equation modeling (SEM).
 
-# Installation
-
-The latest development version at GitHub can be
-installed by `remotes::install_github()`:
-
-```r
-remotes::install_github("sfcheung/semdplot")
-```
-
 # Status
 
-This package is still under development. Please report any
-bugs and issues. Comments and suggestions are also welcomed:
+This package is still **experimental**. Please do not install it for now.
+
+Nevertheless, suggestions are also welcomed:
 
 https://github.com/sfcheung/semdplot/issues

@@ -15,7 +15,9 @@ to generate the diagnostic information. Default is
 \code{FALSE}.}
 }
 \value{
-A \code{semdplot}-class object with plot and print methods.
+A \code{semdplot}-class object.
+
+TODO: Write methods for this class.
 }
 \description{
 It computes diagnostic information such

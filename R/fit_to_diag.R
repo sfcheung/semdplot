@@ -12,7 +12,9 @@
 #' and a single-sample model with observable variables only.
 #'
 #' @return
-#' A `semdplot`-class object with plot and print methods.
+#' A `semdplot`-class object.
+#'
+#' TODO: Write methods for this class.
 #'
 #' @param fit Argument description.
 #' @param add_path Logical. If a path is not in a model

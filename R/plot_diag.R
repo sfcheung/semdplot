@@ -5,8 +5,8 @@
 #'
 #' @details TODO: Should be converted to a method.
 #'
-#' It currently output of any function supported by
-#' [fit_to_diag()].
+#' It currently supports an output of any function
+#' supported by [fit_to_diag()].
 #'
 #' TODO: Allow users to customize the plot.
 #'

@@ -18,7 +18,7 @@ Authors@R: c(
            email = "irissun_s@hotmail.com",
            comment = c(ORCID = "0000-0003-0034-1422"))
            )
-Description: Diagnostic plots for structural equation
+Description: (Work-In-Progress) Diagnostic plots for structural equation
               models, such as plots similar to partial plots
               and aded-variable plots in linear regression.
 License: GPL (>= 3)

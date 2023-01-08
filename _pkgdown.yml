@@ -4,3 +4,15 @@ url: https://sfcheung.github.io/semdplot/
 template:
   bootstrap: 5
 
+reference:
+- title: Main Functions
+  desc:  >
+    Generate diagnostic information and
+    the plots.
+- contents:
+  - fit_to_diag
+  - plot_diag
+- title: Datasets
+  desc: Datasets used in examples.
+- contents:
+  - has_keyword("datasets")

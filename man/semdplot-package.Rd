@@ -6,7 +6,7 @@
 \alias{semdplot-package}
 \title{semdplot: Diagnostic Plots for Structural Equation Models}
 \description{
-Diagnostic plots for structural equation models, such as plots similar to partial plots and aded-variable plots in linear regression.
+(Work-In-Progress) Diagnostic plots for structural equation models, such as plots similar to partial plots and aded-variable plots in linear regression.
 }
 \author{
 \strong{Maintainer}: Shu Fai Cheung \email{shufai.cheung@gmail.com} (\href{https://orcid.org/0000-0002-9871-9448}{ORCID})

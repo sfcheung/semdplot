@@ -1,0 +1,6 @@
+destination: docs
+
+url: https://sfcheung.github.io/semdplot/
+template:
+  bootstrap: 5
+

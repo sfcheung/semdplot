@@ -10,10 +10,49 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 8
 )
 ```
 
 ```{r setup}
 library(semdplot)
+```
+
+```{r}
+# Draft
+
+dat <- data_pa
+
+library(lavaan)
+mod <-
+"
+m11 ~ a11*x1 + a21*x2 + c1 + c2
+m12 ~ b12*m11 + c1 + c2
+m21 ~ a12*x1 + a22*x2 + c1 + c2
+m22 ~ b22*m21 + c1 + c2
+y1 ~ b12y1*m12 + c1 + c2
+y2 ~ b22y2*m22 + c1 + c2
+ind_1 := a11*b12*b12y1
+ind_2 := a21*b22*b22y2
+"
+fit <- sem(mod, dat)
+summary(fit, fit.measures = TRUE)
+```
+
+```{r}
+fit_diag <- fit_to_diag(fit)
+p <- plot_diag(fit_diag,
+               x = c("x1", "x2", "m11", "m12", "m21"),
+               y = c("m11", "m12", "m21", "m22", "y1", "y2"))
+plot(p)
+```
+
+```{r}
+fit_diag_add <- fit_to_diag(fit, add_path = TRUE)
+p2 <- plot_diag(fit_diag_add,
+                x = c("x1", "x2", "m11", "m12", "m21"),
+                y = c("m11", "m12", "m21", "m22", "y1", "y2"))
+plot(p2)
 ```

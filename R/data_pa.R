@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' library(lavaan)
-#' data(dat_pa)
+#' data(data_pa)
 #' mod <-
 #' "
 #' m11 ~ a11*x1 + a21*x2 + c1 + c2
@@ -31,7 +31,7 @@
 #' ind_1 := a11*b12*b12y1
 #' ind_2 := a21*b22*b22y2
 #' "
-#' fit <- sem(mod, dat_pa)
+#' fit <- sem(mod, data_pa)
 #' summary(fit, fit.measures = TRUE)
 #'
-"dat_pa"
+"data_pa"

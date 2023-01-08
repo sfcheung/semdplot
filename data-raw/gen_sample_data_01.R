@@ -29,5 +29,5 @@ set.seed(870986)
 dat <- lavaan::simulateData(mod_p, sample.nobs = 200L)
 fit <- lavaan::sem(mod, dat)
 summary(fit)
-dat_pa <- dat
-usethis::use_data(dat_pa, overwrite = TRUE)
+data_pa <- dat
+usethis::use_data(data_pa, overwrite = TRUE)

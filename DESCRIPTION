@@ -31,4 +31,11 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports:
+    lavaan,
+    stats,
+    ggplot2,
+    patchwork
+Depends:
+    R (>= 3.5.0)
 VignetteBuilder: knitr

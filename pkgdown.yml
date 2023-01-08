@@ -1,7 +1,10 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   semdplot: semdplot.html
-last_built: 2021-10-24T00:50Z
+last_built: 2023-01-08T12:13Z
+urls:
+  reference: https://sfcheung.github.io/semdplot/reference
+  article: https://sfcheung.github.io/semdplot/articles
 

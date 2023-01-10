@@ -4,10 +4,10 @@
 \alias{plot_resid}
 \title{Residual-Only Plot Matrix}
 \usage{
-plot_resid(diag_info, y = NULL, progress = FALSE, ...)
+plot_resid(c_resid, y = NULL, progress = FALSE, ...)
 }
 \arguments{
-\item{diag_info}{Argument description.}
+\item{c_resid}{Argument description.}
 
 \item{y}{Character. The \code{y}-variable.}
 
@@ -21,13 +21,13 @@ Note that \code{\link[=print]{print()}} is used to "plot" the plot.
 }
 \description{
 It generate the plots of residuals based
-on the output of \code{\link[=semdplot]{semdplot()}}.
+on the output of \code{\link[=casewise_residuals]{casewise_residuals()}}.
 }
 \details{
 TODO: Should be converted to a method.
 
 It currently supports an output of any function
-supported by \code{\link[=semdplot]{semdplot()}}.
+supported by \code{\link[=casewise_residuals]{casewise_residuals()}}.
 
 TODO: Allow users to customize the plot.
 }

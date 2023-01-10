@@ -1,0 +1,109 @@
+---
+title: "Case Residuals Computation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Residuals Computation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+**(Work-In-Progress)**
+
+# Introduction
+
+This is a technical appendix outlining how the data used
+to generate the plots are computed.
+
+# Computing Casewise Residuals
+
+The function `casewise_residual()` first identifies the
+$x$ variables: variables that have point to at least
+one other variable, and $y$ variables, variables that
+that have at least one other variable pointing to them.
+Note that a variable can in both sets of variables (e.g.,
+a mediator). It then enumerates all pairwise combination
+of $x$ and $y$ variables to see which of the following
+cases they belong to:
+
+## Free or or Fixed-To-Nonzero Path
+
+If a path is free, or fixed to non-zero, then residuals
+of $x$ and $y$ are computed by predicting by all other
+variables that predict $y$ in the model. The regression
+coefficients are computed by
+
+$$
+\beta_{x} = \Sigma_{x0}^{-1}\Sigma_{(x0, x)},
+$$
+$$
+\beta_{y} = \Sigma_{x0}^{-1}\Sigma_{(x0, y)},
+$$
+
+where $\Sigma_{x0}$ is the model-implied covariance of
+$x0$, all other variables that predict $y$, and
+$\Sigma_{(x0, x)}$ is a column vector of model-implied
+covariance between $x$ and $x0$. Similarly,
+$\Sigma_{(x0, y)}$ is a column vector of model-implied
+covariance between $y$ and $x0$.
+
+The predicted values of $x$ and $y$, $\hat{X}$ and
+$\hat{Y}$, respectively, are computed by
+
+$$
+\hat{X} = X\beta_{x},
+$$
+$$
+\hat{Y} = Y\beta_{y}.
+$$
+
+where $X$ and $Y$ are column vectors of the values of $x$
+and $y$.
+
+The residuals of $x$ and $y$ are computed:
+
+$$
+E_{x} = X - \hat{X},
+$$
+$$
+E_{y} = Y - \hat{Y}.
+$$
+
+That is, they computed as in multiple regression although
+the model-implied covariance matrix is used to compute
+the regression coefficient. Simple standardized residuals
+(standardized by their standard deviations, without
+correction as in studentized residuals in multiple
+regression) are also stored.
+
+## Fixed-to-Zero Path
+
+For a path fixed to zero, if `add_path` is `FALSE`
+(the default), the `casewise_residuals()` will do nothing.
+If `add_path` is `TRUE`, and the $y$ variable does not
+point to $x$ in the model[^This prevents adding a bidirectional path],
+then it will add a `path`
+from $x$ to $y$ and fit the model again. The residuals
+for $x$ an $y$ will then be computed as for free paths
+in the model and stored.
+
+Note that this is done simply by adding `y ~ x` to the
+model. Functions like `lavaan::sem()` may fix or free other
+parameters and so the model being fitted may not differ
+from the original model by one degree of freedom. The
+purpose of this step is purely for exploration.
+
+## $x$ and $y$ are Identical
+
+If $x$ and $y$ are the same variable, then the residuals
+of $y$ when being predicted by other variables pointing to
+it are computed and stored, using the regression coefficients
+in the model.
+
+# Limitations
+
+Note that these residuals are model based but lack the
+adjustments usually done in multiple regression. To our
+knowledge, these adjustments have not be extended to
+path analysis. Nevertheless, these residuals are still useful
+for graphical assessment of linearity and identification
+of unusual cases with respect to a model.

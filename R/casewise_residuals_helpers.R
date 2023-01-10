@@ -6,15 +6,20 @@
 #' @details It will disable `se` and `test` because only the
 #' path estimates are needed.
 #'
+#' Note that the path is added simply by adding `y ~ x`
+#' to the parameter table. [lavaan::sem()] may fix or
+#' free other parameters when doing so.
+#'
 #' @return
-#' It always the output of the refitted model.
+#' It always returns the output of the refitted model.
 #'
 #' @param yname Character. The name of the `y`-variable.
 #'
 #' @param xname Character. The name of the `x`-variable.
 #'
-#' @param fit The original SEM output, such as the output
-#' of [lavaan::sem()].
+#' @param fit The original structural equation modeling
+#' output. Currently only support the output of
+#' [lavaan::sem()].
 #'
 #' @examples
 #' \donttest{
@@ -23,14 +28,25 @@
 #'
 #' @noRd
 #'
+
+add_and_fit <- function(yname,
+                        xname,
+                        fit) {
+    if (inherits(fit, "lavaan")) {
+        out <- add_and_fit_lavaan(yname = yname,
+                                  xname = xname,
+                                  fit = fit)
+        return(out)
+      }
+    stop("The fit object not supported.")
+  }
+
 add_and_fit_lavaan <- function(yname,
                                xname,
                                fit) {
     slot_opt <- fit@Options
     slot_pat <- data.frame(fit@ParTable)
     data_full <- lavaan::lavInspect(fit, "data")
-    #slot_pat$est <- NULL
-    #slot_pat$start <- NULL
     pat_to_add <- lavaan::lavaanify(paste(yname, "~", xname))
     slot_pat_new <- lavaan::lav_partable_merge(pt1 = slot_pat,
                                                pt2 = pat_to_add,
@@ -53,6 +69,7 @@ add_and_fit_lavaan <- function(yname,
 #' @details It is used to determine what to do with a
 #' cell in the `beta` model matrix.
 #'
+#'
 #' This function is not limited to [lavaan::sem()] output.
 #'
 #' TODO: Describes the rules.
@@ -68,8 +85,9 @@ add_and_fit_lavaan <- function(yname,
 #'
 #' @param j Numeric. The column number.
 #'
-#' @param fit The original SEM output, such as the output
-#' of [lavaan::sem()].
+#' @param fit The original structural equation modeling
+#' output. Currently only support the output of
+#' [lavaan::sem()].
 #'
 #' @param free_beta The `beta` matrix storing indicating
 #' whether a path is free.
@@ -81,9 +99,9 @@ add_and_fit_lavaan <- function(yname,
 #'
 #' @noRd
 #'
+
 nature_ij <- function(est_beta,
                       i, j,
-                      fit,
                       free_beta) {
     cnames <- colnames(est_beta)
     rnames <- rownames(est_beta)
@@ -100,7 +118,8 @@ nature_ij <- function(est_beta,
     if (!((free_y_all[, xname] == 0) && (beta_y_all[, xname] == 0))) {
         return("no")
       }
-    if (xname %in% lavaan::lavNames(fit, "ov.y")) {
+    ov_y <- setdiff(rnames, cnames)
+    if (xname %in% ov_y) {
         return("no")
       }
     if ((xname %in% rnames) && (yname %in% cnames)) {

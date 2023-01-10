@@ -1,23 +1,34 @@
-#' @title Diagnostic Plot Matrix
+#' @title Residual Plot Matrix
 #'
-#' @description It generate the diagnostic plots based
-#' on the output of [semdplot()].
+#' @description The plot method of a
+#' `semdplot_residuals`-class object.
+#' It generates the residual plots based
+#' on the output of [casewise_residuals()].
 #'
-#' @details TODO: Should be converted to a method.
-#'
-#' It currently supports an output of any function
-#' supported by [semdplot()].
-#'
-#' TODO: Allow users to customize the plot.
+#' @details It currently supports the output of
+#' [casewise_residuals()].
 #'
 #' @return
-#' A `ggplot2` plot, or an array of `ggplot2` plots.
+#' A `ggplot2` plot, or a list of `ggplot2` plots.
 #'
-#' @param diag_info Argument description.
+#' @param x A `semdplot_residuals`-class object,
+#' such as the output of [casewise_residuals()].
+#' Named `x` as required for the `plot` method.
 #'
-#' @param x Character. The `x`-variable.
+#' @param what String. What to plot. Can be `"partial"`
+#' or `"residual"`. if `"partial"`, the default,
+#' a matrix of partial plots and/or plots of
+#' residuals will be plotted. If `"residual"`,
+#' then only the plots of residuals of
+#' y-variable will be plotted.
 #'
-#' @param y Character. The `y`-variable.
+#' @param x_names Character vector. The `x`-variables. If
+#' the vector is named, the names will be used instead
+#' of the variable names in the plots.
+#'
+#' @param y_names Character vector. The `y`-variables. If
+#' the vector is named, the names will be used instead
+#' of the variable names in the plots.
 #'
 #' @param same_x_range Whether all plots will have the
 #' same range for the x-axis. Default is `TRUE`.
@@ -92,6 +103,13 @@
 #' @param text_nopath String. Text to display in empty
 #' cells. Default is`"--".
 #'
+#' @param output_type The type of output. If `"plot"`,
+#' the default, the plots will be processed by
+#' [patchwork::wrap_plots()]. If `"list"`, the list
+#' of plots will be returned.
+#'
+#' @param ... Additional arguments. Not used.
+#'
 #' @examples
 #' \donttest{
 #' # TODO: Prepare some examples.
@@ -101,41 +119,65 @@
 #'
 #' @importFrom rlang .data
 
-plot_diag <- function(diag_info,
-                      x = NULL,
-                      y = NULL,
-                      same_x_range = TRUE,
-                      same_y_range = TRUE,
-                      partial_point_aes = list(),
-                      partial_loess_aes = list(),
-                      partial_reg_aes = list(),
-                      partial_b_aes = list(),
-                      partial_theme_aes = list(),
-                      added_point_aes = list(),
-                      added_loess_aes = list(),
-                      added_reg_aes = list(),
-                      added_b_aes = list(),
-                      added_theme_aes = list(),
-                      resid_hist_aes = list(),
-                      resid_density_aes = list(),
-                      resid_theme_aes = list(),
-                      text_nopath = "--"
-                     ) {
-
-    res0 <- partial_to_long(diag_info, what = "resid")
-    std0 <- partial_to_long(diag_info, what = "std")
+plot.semdplot_residuals <- function(x,
+                                    what = c("partial", "residual"),
+                                    x_names = NULL,
+                                    y_names = NULL,
+                                    same_x_range = TRUE,
+                                    same_y_range = TRUE,
+                                    partial_point_aes = list(),
+                                    partial_loess_aes = list(),
+                                    partial_reg_aes = list(),
+                                    partial_b_aes = list(),
+                                    partial_theme_aes = list(),
+                                    added_point_aes = list(),
+                                    added_loess_aes = list(),
+                                    added_reg_aes = list(),
+                                    added_b_aes = list(),
+                                    added_theme_aes = list(),
+                                    resid_hist_aes = list(),
+                                    resid_density_aes = list(),
+                                    resid_theme_aes = list(),
+                                    text_nopath = "--",
+                                    output_type = c("plot", "list"),
+                                    ...
+                                  ) {
+    what <- match.arg(what)
+    output_type <- match.arg(output_type)
+    if (what == "residual") {
+        out <- plot_resid(c_resid = x,
+                          y = y_names,
+                          progress = FALSE)
+        return(out)
+      }
+    res0 <- partial_to_long(partial_list = x,
+                            what = "resid")
+    std0 <- partial_to_long(partial_list = x,
+                            what = "std")
     xnames <- unique(std0$xname)
     ynames <- unique(std0$yname)
-    if (!is.null(x)) {
-        xnames <- intersect(xnames, x)
-        xnames <- stats::na.omit(xnames[match(x, xnames)])
+    if (!is.null(x_names)) {
+        xnames <- intersect(xnames, x_names)
+        xnames <- stats::na.omit(xnames[match(x_names, xnames)])
       }
-    if (!is.null(y)) {
-        ynames <- intersect(ynames, y)
-        ynames <- stats::na.omit(ynames[match(y, ynames)])
+    if (!is.null(y_names)) {
+        ynames <- intersect(ynames, y_names)
+        ynames <- stats::na.omit(ynames[match(y_names, ynames)])
       }
     if (length(xnames) == 0) stop("All x variable(s) not in the model.")
     if (length(ynames) == 0) stop("All y variable(s) not in the model.")
+    if (!is.null(names(x_names))) {
+        xlabels <- names(x_names)[match(xnames, x_names)]
+        names(xlabels) <- xnames
+      } else {
+        xlabels <- NULL
+      }
+    if (!is.null(names(y_names))) {
+        ylabels <- names(y_names)[match(ynames, y_names)]
+        names(ylabels) <- ynames
+      } else {
+        ylabels <- NULL
+      }
     p <- length(xnames)
     q <- length(ynames)
 
@@ -212,7 +254,8 @@ plot_diag <- function(diag_info,
     resid_theme_aes <- utils::modifyList(partial_theme_aes_def,
                                          resid_theme_aes)
 
-    res0 <- res0[(res0$xname %in% x) | (res0$yname %in% y), ]
+    res0 <- res0[(res0$xname %in% x_names) |
+                 (res0$yname %in% y_names), ]
     all_ranges <- get_xy_range(res0)
     if (same_x_range) {
         xlim_i <- all_ranges$zx_range
@@ -234,7 +277,7 @@ plot_diag <- function(diag_info,
                 if (nrow(res0i) == 0) {
                     return(grid::textGrob(text_nopath))
                   }
-                plot_diag_i(x = xi,
+                plot_cres_i(x = xi,
                             y = yi,
                             res = res0i,
                             std = std0i,
@@ -255,25 +298,33 @@ plot_diag <- function(diag_info,
                             added_theme_aes = added_theme_aes,
                             resid_hist_aes = resid_hist_aes,
                             resid_density_aes = resid_density_aes,
-                            resid_theme_aes = resid_theme_aes
+                            resid_theme_aes = resid_theme_aes,
+                            xlabel = xlabels[xi],
+                            ylabel = ylabels[yi]
                            )
               })
           })
-    out <- patchwork::wrap_plots(unlist(ps, recursive = FALSE),
-                                 ncol = p,
-                                 nrow = q)
-    out
+    if (output_type == "plot") {
+        out <- patchwork::wrap_plots(unlist(ps, recursive = FALSE),
+                                    ncol = p,
+                                    nrow = q)
+        return(out)
+      }
+    if (output_type == "list") {
+        out <- unlist(ps, recursive = FALSE)
+        return(out)
+      }
   }
 
 #' @title Residual-Only Plot Matrix
 #'
 #' @description It generate the plots of residuals based
-#' on the output of [semdplot()].
+#' on the output of [casewise_residuals()].
 #'
 #' @details TODO: Should be converted to a method.
 #'
 #' It currently supports an output of any function
-#' supported by [semdplot()].
+#' supported by [casewise_residuals()].
 #'
 #' TODO: Allow users to customize the plot.
 #'
@@ -281,7 +332,7 @@ plot_diag <- function(diag_info,
 #' A `gg`-class object generated by [GGally::ggpairs()].
 #' Note that [print()] is used to "plot" the plot.
 #'
-#' @param diag_info Argument description.
+#' @param c_resid Argument description.
 #'
 #' @param y Character. The `y`-variable.
 #'
@@ -297,12 +348,12 @@ plot_diag <- function(diag_info,
 #' @export
 #'
 
-plot_resid <- function(diag_info,
+plot_resid <- function(c_resid,
                        y = NULL,
                        progress = FALSE,
                        ...
                      ) {
-    res0 <- partial_to_resid(diag_info)
+    res0 <- y_residuals(c_resid)
     ynames <- colnames(res0)
     if (!is.null(y)) {
         ynames <- intersect(ynames, y)
@@ -331,7 +382,7 @@ get_xy_range <- function(res) {
   }
 
 #' @noRd
-plot_diag_i <- function(res,
+plot_cres_i <- function(res,
                         std,
                         x,
                         y,
@@ -352,23 +403,26 @@ plot_diag_i <- function(res,
                         added_theme_aes = list(),
                         resid_hist_aes = list(),
                         resid_density_aes = list(),
-                        resid_theme_aes = list()
+                        resid_theme_aes = list(),
+                        xlabel = NULL,
+                        ylabel = NULL
                        ) {
    if (std$type == "residual") {
-        out <- plot_diag_i_resid(res = res,
+        out <- plot_cres_i_resid(res = res,
                                  std = std,
                                  x = x,
                                  y = y,
                                  resid_xlim = resid_xlim,
                                  resid_hist_aes = resid_hist_aes,
                                  resid_density_aes = resid_density_aes,
-                                 resid_theme_aes = resid_theme_aes
+                                 resid_theme_aes = resid_theme_aes,
+                                 ylabel = ylabel
                                 )
         return(out)
         # return(grid::textGrob("Residual"))
       }
     if (std$type == "partial") {
-        out <- plot_diag_i_partial(res = res,
+        out <- plot_cres_i_partial(res = res,
                                    std = std,
                                    x = x,
                                    y = y,
@@ -378,13 +432,15 @@ plot_diag_i <- function(res,
                                    partial_loess_aes = partial_loess_aes,
                                    partial_reg_aes = partial_reg_aes,
                                    partial_b_aes = partial_b_aes,
-                                   partial_theme_aes = partial_theme_aes
+                                   partial_theme_aes = partial_theme_aes,
+                                   xlabel = xlabel,
+                                   ylabel = ylabel
                                   )
         return(out)
         # return(grid::textGrob("Partial"))
       }
     if (std$type == "added") {
-        out <- plot_diag_i_partial(res = res,
+        out <- plot_cres_i_partial(res = res,
                                    std = std,
                                    x = x,
                                    y = y,
@@ -394,7 +450,9 @@ plot_diag_i <- function(res,
                                    partial_loess_aes = added_loess_aes,
                                    partial_reg_aes = added_reg_aes,
                                    partial_b_aes = added_b_aes,
-                                   partial_theme_aes = added_theme_aes
+                                   partial_theme_aes = added_theme_aes,
+                                   xlabel = xlabel,
+                                   ylabel = ylabel
                                   )
         return(out)
         # return(grid::textGrob("Added"))
@@ -403,7 +461,7 @@ plot_diag_i <- function(res,
   }
 
 #' @noRd
-plot_diag_i_partial <- function(res,
+plot_cres_i_partial <- function(res,
                                 std,
                                 x,
                                 y,
@@ -413,7 +471,9 @@ plot_diag_i_partial <- function(res,
                                 partial_loess_aes = list(),
                                 partial_reg_aes = list(),
                                 partial_b_aes = list(),
-                                partial_theme_aes = list()
+                                partial_theme_aes = list(),
+                                xlabel = NULL,
+                                ylabel = NULL
                                ) {
     if (!is.null(partial_ylim)) {
         b_pos_y <- partial_ylim[1] + .95 * (partial_ylim[2] - partial_ylim[1])
@@ -465,18 +525,21 @@ plot_diag_i_partial <- function(res,
     p <- p + do.call(ggplot2::theme, tmp)
     if (!is.null(partial_xlim)) p <- p + ggplot2::xlim(partial_xlim)
     if (!is.null(partial_ylim)) p <- p + ggplot2::ylim(partial_ylim)
+    if (!is.null(xlabel)) p <- p + ggplot2::xlab(xlabel)
+    if (!is.null(ylabel)) p <- p + ggplot2::ylab(ylabel)
     p
   }
 
 #' @noRd
-plot_diag_i_resid <- function(res,
+plot_cres_i_resid <- function(res,
                               std,
                               x,
                               y,
                               resid_xlim = NULL,
                               resid_hist_aes = list(),
                               resid_density_aes = list(),
-                              resid_theme_aes = list()
+                              resid_theme_aes = list(),
+                              ylabel = NULL
                              ) {
     p <- ggplot2::ggplot(data = res,
                 ggplot2::aes(x = .data$y_zresid))

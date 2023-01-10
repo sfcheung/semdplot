@@ -47,12 +47,12 @@ partial_to_long_i <- function(partial_i, what) {
 #' @title Residual-Only
 #'
 #' @description It extracts the residuals from
-#' the output of [semdplot()].
+#' the output of [casewise_residuals()].
 #'
 #' @details
 #'
 #' It currently supports an output of any function
-#' supported by [semdplot()].
+#' supported by [casewise_residuals()].
 #'
 #' TODO: Allow users to customize the plot.
 #'
@@ -69,7 +69,7 @@ partial_to_long_i <- function(partial_i, what) {
 #' @export
 #'
 
-partial_to_resid <- function(diag_info) {
+y_residuals <- function(diag_info) {
     partial0 <- sapply(unlist(diag_info, recursive = FALSE),
                        function(x) {
                            if (is.list(x)) {

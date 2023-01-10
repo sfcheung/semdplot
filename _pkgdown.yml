@@ -4,14 +4,26 @@ url: https://sfcheung.github.io/semdplot/
 template:
   bootstrap: 5
 
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - semdplot
+  - casewise_residuals
+
 reference:
 - title: Main Functions
   desc:  >
     Generate diagnostic information and
-    the plots.
+    the plots.semdplot_residuals
 - contents:
-  - fit_to_diag
-  - plot_diag
+  - casewise_residuals
+  - plot.semdplot_residuals
+  - plot_resid
+- title: Others
+  desc: Helper functions.
+- contents:
+  - y_residuals
 - title: Datasets
   desc: Datasets used in examples.
 - contents:

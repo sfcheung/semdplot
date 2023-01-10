@@ -7,7 +7,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Draft. Not ready.
+**(Work-In-Progress)**
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -18,13 +18,14 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Load the Package and Fit a Path Model
+
 ```{r setup}
 library(semdplot)
 ```
 
 ```{r}
-# Draft
-
+# A sample dataset from semdplot
 dat <- data_pa
 
 library(lavaan)
@@ -43,18 +44,114 @@ fit <- sem(mod, dat)
 summary(fit, fit.measures = TRUE)
 ```
 
+# Compute Residuals for the PLots
+
+The function `casewise_residuals()` can be used to
+compute the necessary residuals (please refer to
+`vignettes("casewise_residuals")` on the computation):
+
 ```{r}
-fit_diag <- fit_to_diag(fit)
-p <- plot_diag(fit_diag,
-               x = c("x1", "x2", "m11", "m12", "m21"),
-               y = c("m11", "m12", "m21", "m22", "y1", "y2"))
+fit_res <- casewise_residuals(fit)
+```
+
+# Plot Partial Plots and Residual Plots for Selected Variables
+
+The output of `casewise_residuals()` has a `plot()` method.
+Simply use `plot()` can produce the plots. If necessary,
+users can use `x_names` and `y_names` to set the $x$
+and $y$ variables to be included:
+
+```{r}
+p <- plot(fit_res,
+          x_names = c("x1", "x2", "m11", "m12", "m21"),
+          y_names = c("m11", "m12", "m21", "m22", "y1", "y2"))
 plot(p)
 ```
 
+The output is a `ggplot2` plot. It can be customized.
+Please refer to `plot.semdplot_residuals()` on the options.
+
+# If A Path Does Not Exist, Add It
+
+For paths not in the model but could have been added, residuals
+can be computed by fitting a model with this path added.
+This is done when calling `casewise_residuals()` and set
+`add_path` to `TRUE:
+
 ```{r}
-fit_diag_add <- fit_to_diag(fit, add_path = TRUE)
-p2 <- plot_diag(fit_diag_add,
-                x = c("x1", "x2", "m11", "m12", "m21"),
-                y = c("m11", "m12", "m21", "m22", "y1", "y2"))
+fit_res_add <- casewise_residuals(fit, add_path = TRUE)
+```
+
+If these residuals are computed, they will be plotted by
+`plot.semdplot_residuals()`:
+
+```{r}
+p2 <- plot(fit_res_add,
+           x_names = c("x1", "x2", "m11", "m12", "m21"),
+           y_names = c("m11", "m12", "m21", "m22", "y1", "y2"))
 plot(p2)
+```
+
+# Fewer Variables
+
+The follow code just illustrates how to plot fewer variables:
+
+## 3-$x$-2$y$ Plots
+
+```{r}
+p2 <- plot(fit_res_add,
+           x_names = c("x1", "m11", "m12"),
+           y_names = c("y1", "y2"))
+plot(p2)
+```
+
+## Use a Named Vector to Change Variable Names in the Plots
+
+```{r}
+p2 <- plot(fit_res_add,
+           x_names = c(IV1 = "x1", Med1 = "m11", Med2 = "m12"),
+           y_names = c(DV1 = "y1", DV2 = "y2"))
+plot(p2)
+```
+
+# Plot Only One Partial Plot
+
+This example also illustrates how to change the style.
+
+Note that, if `ggplot2` functions are used when changing the
+aesthetics, users need to load `ggplot2` first, e.g., `rel()`.
+
+```{r}
+library(ggplot2)
+p2 <- plot(fit_res_add,
+           x_names = "x1",
+           y_names = "m11",
+           partial_point_aes = list(size = 4,
+                                    color = "blue"),
+           partial_reg_aes = list(size = 10),
+           partial_loess_aes = list(color = "black",
+                                    linetype = "dashed"),
+           partial_b_aes = list(size = rel(10)))
+plot(p2)
+```
+
+# Plot of Residuals only
+
+By setting `what = "residual"`, the `plot()` method can
+produce only plots for residuals of endogenous variables:
+
+```{r}
+p <- plot(fit_res_add,
+          what = "residual")
+print(p)
+```
+
+Users can also use `y_names` to select only some of the
+endogenous variables for the plot:
+
+```{r}
+p <- plot(fit_res_add,
+          what = "residual",
+          y_names = c("m11", "m12"))
+print(p)
 ```

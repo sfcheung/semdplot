@@ -7,4 +7,5 @@
 ## usethis namespace: end
 NULL
 
-globalVariables(c("x_zresid", "y_zresid", "density"))
+globalVariables(c("density"))
+

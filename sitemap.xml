@@ -7,6 +7,9 @@
     <loc>https://sfcheung.github.io/semdplot/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://sfcheung.github.io/semdplot/articles/casewise_residuals.html</loc>
+  </url>
+  <url>
     <loc>https://sfcheung.github.io/semdplot/articles/index.html</loc>
   </url>
   <url>
@@ -22,18 +25,24 @@
     <loc>https://sfcheung.github.io/semdplot/news/index.html</loc>
   </url>
   <url>
-    <loc>https://sfcheung.github.io/semdplot/reference/data_pa.html</loc>
+    <loc>https://sfcheung.github.io/semdplot/reference/casewise_residuals.html</loc>
   </url>
   <url>
-    <loc>https://sfcheung.github.io/semdplot/reference/fit_to_diag.html</loc>
+    <loc>https://sfcheung.github.io/semdplot/reference/data_pa.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/semdplot/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://sfcheung.github.io/semdplot/reference/plot_diag.html</loc>
+    <loc>https://sfcheung.github.io/semdplot/reference/plot.semdplot_residuals.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semdplot/reference/plot_resid.html</loc>
   </url>
   <url>
     <loc>https://sfcheung.github.io/semdplot/reference/semdplot-package.html</loc>
+  </url>
+  <url>
+    <loc>https://sfcheung.github.io/semdplot/reference/y_residuals.html</loc>
   </url>
 </urlset>

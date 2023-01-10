@@ -41,6 +41,12 @@
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/casewise_residuals.html">Case Residuals Computation</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
@@ -70,14 +76,14 @@
 
     
     
+<p><strong>(Work-In-Progress)</strong></p>
 <div class="section level2">
-<h2 id="draft--not-ready-">Draft. Not ready.<a class="anchor" aria-label="anchor" href="#draft--not-ready-"></a>
+<h2 id="load-the-package-and-fit-a-path-model">Load the Package and Fit a Path Model<a class="anchor" aria-label="anchor" href="#load-the-package-and-fit-a-path-model"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">semdplot</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Draft</span></span>
-<span></span>
+<code class="sourceCode R"><span><span class="co"># A sample dataset from semdplot</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">data_pa</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be" class="external-link">lavaan</a></span><span class="op">)</span></span>
@@ -194,22 +200,122 @@
 <span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
 <span><span class="co">#&gt;     ind_1             0.070    0.019    3.612    0.000</span></span>
 <span><span class="co">#&gt;     ind_2             0.073    0.026    2.840    0.005</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_to_diag.html">fit_to_diag</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_diag.html">plot_diag</a></span><span class="op">(</span><span class="va">fit_diag</span>,</span>
-<span>               x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span><span class="op">)</span>,</span>
-<span>               y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span>, <span class="st">"m22"</span>, <span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="semdplot_files/figure-html/unnamed-chunk-3-1.png" width="768"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit_diag_add</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fit_to_diag.html">fit_to_diag</a></span><span class="op">(</span><span class="va">fit</span>, add_path <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_diag.html">plot_diag</a></span><span class="op">(</span><span class="va">fit_diag_add</span>,</span>
-<span>                x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span><span class="op">)</span>,</span>
-<span>                y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span>, <span class="st">"m22"</span>, <span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
-<p><img src="semdplot_files/figure-html/unnamed-chunk-4-1.png" width="768"></p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="compute-residuals-for-the-plots">Compute Residuals for the PLots<a class="anchor" aria-label="anchor" href="#compute-residuals-for-the-plots"></a>
+</h2>
+<p>The function <code><a href="../reference/casewise_residuals.html">casewise_residuals()</a></code> can be used to compute
+the necessary residuals (please refer to
+<code>vignettes("casewise_residuals")</code> on the computation):</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/casewise_residuals.html">casewise_residuals</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="plot-partial-plots-and-residual-plots-for-selected-variables">Plot Partial Plots and Residual Plots for Selected Variables<a class="anchor" aria-label="anchor" href="#plot-partial-plots-and-residual-plots-for-selected-variables"></a>
+</h2>
+<p>The output of <code><a href="../reference/casewise_residuals.html">casewise_residuals()</a></code> has a
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method. Simply use <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> can produce
+the plots. If necessary, users can use <code>x_names</code> and
+<code>y_names</code> to set the <span class="math inline">\(x\)</span>
+and <span class="math inline">\(y\)</span> variables to be included:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res</span>,</span>
+<span>          x_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span><span class="op">)</span>,</span>
+<span>          y_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span>, <span class="st">"m22"</span>, <span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-4-1.png" width="768"></p>
+<p>The output is a <code>ggplot2</code> plot. It can be customized.
+Please refer to <code><a href="../reference/plot.semdplot_residuals.html">plot.semdplot_residuals()</a></code> on the
+options.</p>
+</div>
+<div class="section level2">
+<h2 id="if-a-path-does-not-exist-add-it">If A Path Does Not Exist, Add It<a class="anchor" aria-label="anchor" href="#if-a-path-does-not-exist-add-it"></a>
+</h2>
+<p>For paths not in the model but could have been added, residuals can
+be computed by fitting a model with this path added. This is done when
+calling <code><a href="../reference/casewise_residuals.html">casewise_residuals()</a></code> and set <code>add_path</code>
+to `TRUE:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_res_add</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/casewise_residuals.html">casewise_residuals</a></span><span class="op">(</span><span class="va">fit</span>, add_path <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>If these residuals are computed, they will be plotted by
+<code><a href="../reference/plot.semdplot_residuals.html">plot.semdplot_residuals()</a></code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res_add</span>,</span>
+<span>           x_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span><span class="op">)</span>,</span>
+<span>           y_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m11"</span>, <span class="st">"m12"</span>, <span class="st">"m21"</span>, <span class="st">"m22"</span>, <span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
+</div>
+<div class="section level2">
+<h2 id="fewer-variables">Fewer Variables<a class="anchor" aria-label="anchor" href="#fewer-variables"></a>
+</h2>
+<p>The follow code just illustrates how to plot fewer variables:</p>
+<div class="section level3">
+<h3 id="x-2y-plots">3-<span class="math inline">\(x\)</span>-2<span class="math inline">\(y\)</span> Plots<a class="anchor" aria-label="anchor" href="#x-2y-plots"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res_add</span>,</span>
+<span>           x_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"m11"</span>, <span class="st">"m12"</span><span class="op">)</span>,</span>
+<span>           y_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y1"</span>, <span class="st">"y2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
+</div>
+<div class="section level3">
+<h3 id="use-a-named-vector-to-change-variable-names-in-the-plots">Use a Named Vector to Change Variable Names in the Plots<a class="anchor" aria-label="anchor" href="#use-a-named-vector-to-change-variable-names-in-the-plots"></a>
+</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res_add</span>,</span>
+<span>           x_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>IV1 <span class="op">=</span> <span class="st">"x1"</span>, Med1 <span class="op">=</span> <span class="st">"m11"</span>, Med2 <span class="op">=</span> <span class="st">"m12"</span><span class="op">)</span>,</span>
+<span>           y_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>DV1 <span class="op">=</span> <span class="st">"y1"</span>, DV2 <span class="op">=</span> <span class="st">"y2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-8-1.png" width="768"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="plot-only-one-partial-plot">Plot Only One Partial Plot<a class="anchor" aria-label="anchor" href="#plot-only-one-partial-plot"></a>
+</h2>
+<p>This example also illustrates how to change the style.</p>
+<p>Note that, if <code>ggplot2</code> functions are used when changing
+the aesthetics, users need to load <code>ggplot2</code> first, e.g.,
+<code><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">rel()</a></code>.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res_add</span>,</span>
+<span>           x_names <span class="op">=</span> <span class="st">"x1"</span>,</span>
+<span>           y_names <span class="op">=</span> <span class="st">"m11"</span>,</span>
+<span>           partial_point_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                    color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>,</span>
+<span>           partial_reg_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>           partial_loess_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>                                    linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span>,</span>
+<span>           partial_b_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">rel</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-9-1.png" width="768"></p>
+</div>
+<div class="section level2">
+<h2 id="plot-of-residuals-only">Plot of Residuals only<a class="anchor" aria-label="anchor" href="#plot-of-residuals-only"></a>
+</h2>
+<p>By setting <code>what = "residual"</code>, the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>
+method can produce only plots for residuals of endogenous variables:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res_add</span>,</span>
+<span>          what <span class="op">=</span> <span class="st">"residual"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'GGally':</span></span>
+<span><span class="co">#&gt;   method from   </span></span>
+<span><span class="co">#&gt;   +.gg   ggplot2</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
+<p>Users can also use <code>y_names</code> to select only some of the
+endogenous variables for the plot:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit_res_add</span>,</span>
+<span>          what <span class="op">=</span> <span class="st">"residual"</span>,</span>
+<span>          y_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m11"</span>, <span class="st">"m12"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
+<p><img src="semdplot_files/figure-html/unnamed-chunk-11-1.png" width="768"></p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

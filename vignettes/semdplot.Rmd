@@ -43,18 +43,74 @@ fit <- sem(mod, dat)
 summary(fit, fit.measures = TRUE)
 ```
 
+# Plot partial plots and residual plots for selected variables
+
 ```{r}
-fit_diag <- fit_to_diag(fit)
+fit_diag <- semdplot(fit)
 p <- plot_diag(fit_diag,
                x = c("x1", "x2", "m11", "m12", "m21"),
                y = c("m11", "m12", "m21", "m22", "y1", "y2"))
 plot(p)
 ```
 
+# If a path does not exist, add it
+
 ```{r}
-fit_diag_add <- fit_to_diag(fit, add_path = TRUE)
+fit_diag_add <- semdplot(fit, add_path = TRUE)
+t(sapply(fit_diag_add, function(x) sapply(x, function(x) is.list(x))))
+t(sapply(fit_diag_add, function(x) sapply(x, function(x) {
+    if (is.list(x)) {x$type} else {NA}
+  })))
 p2 <- plot_diag(fit_diag_add,
                 x = c("x1", "x2", "m11", "m12", "m21"),
                 y = c("m11", "m12", "m21", "m22", "y1", "y2"))
 plot(p2)
+```
+
+# Fewer variables
+
+```{r}
+fit_diag_add <- semdplot(fit, add_path = TRUE)
+p2 <- plot_diag(fit_diag_add,
+                x = c("x1", "m11", "m12"),
+                y = c("y1", "y2"))
+plot(p2)
+```
+
+# Plot only one partial plot
+
+Also illustrate how to change the style.
+
+If `ggplot2` functions are used when changing the
+aesthetics, need to load `ggplot2` first, e.g.,
+`rel()`.
+
+```{r}
+library(ggplot2)
+fit_diag_add <- semdplot(fit, add_path = TRUE)
+p2 <- plot_diag(fit_diag_add,
+                x = "x1",
+                y = "m11",
+                partial_point_aes = list(size = 4,
+                                         color = "blue"),
+                partial_reg_aes = list(size = 10),
+                partial_loess_aes = list(color = "black",
+                                         linetype = "dashed"),
+                partial_b_aes = list(size = rel(10)))
+plot(p2)
+```
+
+# Plot of Residuals only
+
+```{r}
+p <- plot_resid(fit_diag_add)
+print(p)
+```
+
+# Plot of Residuals only of Some Variables
+
+```{r}
+p <- plot_resid(fit_diag_add,
+                y = c("m11", "m12"))
+print(p)
 ```

@@ -30,7 +30,7 @@
 #' @export
 #'
 
-fit_to_diag <- function(fit,
+semdplot <- function(fit,
                         add_path = FALSE) {
     # It may support the output of other SEM functions in the future.
     if (inherits(fit, "lavaan")) {
@@ -42,6 +42,8 @@ fit_to_diag <- function(fit,
     return(out)
   }
 
+globalVariables(c("density"))
+
 fit_to_diag_lavaan <- function(fit,
                                add_path = FALSE) {
     # If the check fails, an error will be raised.
@@ -50,11 +52,14 @@ fit_to_diag_lavaan <- function(fit,
     y <- lavaan::lavNames(fit, "eqs.y")
     y_pure <- lavaan::lavNames(fit, "ov.y")
     est_beta <- lavaan::lavInspect(fit, what = "est")$beta
-    est_beta <- est_beta[y, !colnames(est_beta) %in% y_pure]
+    # est_beta <- est_beta[y, !colnames(est_beta) %in% y_pure]
+    est_beta <- est_beta[y, ]
     std_beta <- lavaan::lavInspect(fit, what = "std")$beta
-    std_beta <- std_beta[y, !colnames(std_beta) %in% y_pure]
+    # std_beta <- std_beta[y, !colnames(std_beta) %in% y_pure]
+    std_beta <- std_beta[y, ]
     free_beta <- lavaan::lavInspect(fit, what = "free")$beta
-    free_beta <- free_beta[y, !colnames(free_beta) %in% y_pure]
+    # free_beta <- free_beta[y, !colnames(free_beta) %in% y_pure]
+    free_beta <- free_beta[y, ]
     fit_data <- lavaan::lavInspect(fit, "data")
     fit_implied <- lavaan::lavInspect(fit, "implied")
     implied_mean <- fit_implied$mean
@@ -105,16 +110,19 @@ fit_to_diag_lavaan <- function(fit,
                     y_pure_ij <- lavaan::lavNames(fit_ij, "ov.y")
                     est_beta_ij <- lavaan::lavInspect(fit_ij,
                                                       what = "est")$beta
-                    est_beta_ij <- est_beta_ij[y_ij,
-                                      !colnames(est_beta_ij) %in% y_pure_ij]
+                    # est_beta_ij <- est_beta_ij[y_ij,
+                    #                   !colnames(est_beta_ij) %in% y_pure_ij]
+                    est_beta_ij <- est_beta_ij[y_ij, ]
                     std_beta_ij <- lavaan::lavInspect(fit_ij,
                                                       what = "std")$beta
-                    std_beta_ij <- std_beta_ij[y_ij,
-                                      !colnames(std_beta_ij) %in% y_pure_ij]
+                    # std_beta_ij <- std_beta_ij[y_ij,
+                    #                   !colnames(std_beta_ij) %in% y_pure_ij]
+                    std_beta_ij <- std_beta_ij[y_ij, ]
                     free_beta_ij <- lavaan::lavInspect(fit_ij,
                                                        what = "free")$beta
-                    free_beta_ij <- free_beta_ij[y_ij,
-                                      !colnames(free_beta_ij) %in% y_pure_ij]
+                    # free_beta_ij <- free_beta_ij[y_ij,
+                    #                   !colnames(free_beta_ij) %in% y_pure_ij]
+                    free_beta_ij <- free_beta_ij[y_ij, ]
                     fit_implied_ij <- lavaan::lavInspect(fit_ij,
                                                          what = "implied")
                     implied_mean_ij <- fit_implied_ij$mean

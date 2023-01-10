@@ -4,7 +4,7 @@
 #'
 #' @details It receives the output of structural equation
 #' model analysis and check whether it is supported by
-#' [fit_to_diag()].
+#' [semdplot()].
 #'
 #' @return
 #' It always return `NULL`. If the fit object is not supported,

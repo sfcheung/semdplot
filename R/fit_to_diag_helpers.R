@@ -100,6 +100,9 @@ nature_ij <- function(est_beta,
     if (!((free_y_all[, xname] == 0) && (beta_y_all[, xname] == 0))) {
         return("no")
       }
+    if (xname %in% lavaan::lavNames(fit, "ov.y")) {
+        return("no")
+      }
     if ((xname %in% rnames) && (yname %in% cnames)) {
         beta_x_all <- est_beta[xname, , drop = FALSE]
         free_x_all <- free_beta[xname, , drop = FALSE]

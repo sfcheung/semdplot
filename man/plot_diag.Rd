@@ -4,7 +4,27 @@
 \alias{plot_diag}
 \title{Diagnostic Plot Matrix}
 \usage{
-plot_diag(diag_info, x = NULL, y = NULL)
+plot_diag(
+  diag_info,
+  x = NULL,
+  y = NULL,
+  same_x_range = TRUE,
+  same_y_range = TRUE,
+  partial_point_aes = list(),
+  partial_loess_aes = list(),
+  partial_reg_aes = list(),
+  partial_b_aes = list(),
+  partial_theme_aes = list(),
+  added_point_aes = list(),
+  added_loess_aes = list(),
+  added_reg_aes = list(),
+  added_b_aes = list(),
+  added_theme_aes = list(),
+  resid_hist_aes = list(),
+  resid_density_aes = list(),
+  resid_theme_aes = list(),
+  text_nopath = "--"
+)
 }
 \arguments{
 \item{diag_info}{Argument description.}
@@ -12,19 +32,92 @@ plot_diag(diag_info, x = NULL, y = NULL)
 \item{x}{Character. The \code{x}-variable.}
 
 \item{y}{Character. The \code{y}-variable.}
+
+\item{same_x_range}{Whether all plots will have the
+same range for the x-axis. Default is \code{TRUE}.}
+
+\item{same_y_range}{Whether all plots will have the
+same range for the y-axis, except for the plots of
+residuals. Default is \code{TRUE}.}
+
+\item{partial_point_aes}{A list of argument for
+\code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}. Used to modify the default
+aesthetics of the points in the partial plot.}
+
+\item{partial_loess_aes}{A list of argument for
+\code{\link[ggplot2:geom_path]{ggplot2::geom_line()}} for the loess line.
+Used to modify the default
+aesthetics of the line in the partial plot.}
+
+\item{partial_reg_aes}{A list of argument for
+\code{\link[ggplot2:geom_path]{ggplot2::geom_line()}} for the regression line.
+Used to modify the default
+aesthetics of the line in the partial plot.}
+
+\item{partial_b_aes}{A list of argument for
+\code{\link[ggplot2:annotate]{ggplot2::annotate()}} for the standardized
+regression coefficient.
+Used to modify the default
+aesthetics of the text in the partial plot.}
+
+\item{partial_theme_aes}{A list of argument for
+\code{\link[ggplot2:theme]{ggplot2::theme()}} for the partial plots.
+Used to modify the default
+theme of the partial plot.}
+
+\item{added_point_aes}{A list of argument for
+\code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}. Used to modify the default
+aesthetics of the points in the added-variable plot.}
+
+\item{added_loess_aes}{A list of argument for
+\code{\link[ggplot2:geom_path]{ggplot2::geom_line()}} for the loess line.
+Used to modify the default
+aesthetics of the line in the added-variable plot.}
+
+\item{added_reg_aes}{A list of argument for
+\code{\link[ggplot2:geom_path]{ggplot2::geom_line()}} for the regression line.
+Used to modify the default
+aesthetics of the line in the added-variable plot.}
+
+\item{added_b_aes}{A list of argument for
+\code{\link[ggplot2:annotate]{ggplot2::annotate()}} for the standardized
+regression coefficient.
+Used to modify the default
+aesthetics of the text in the added-variable plot.}
+
+\item{added_theme_aes}{A list of argument for
+\code{\link[ggplot2:theme]{ggplot2::theme()}} for the added-variable plots.
+Used to modify the default
+theme of the added-variable plot.}
+
+\item{resid_hist_aes}{A list of arguments for
+\code{\link[ggplot2:geom_histogram]{ggplot2::geom_histogram()}} for the plot of residuals.
+Use to modify the default aesthetics of the histogram.}
+
+\item{resid_density_aes}{A list of arguments for
+\code{\link[ggplot2:geom_density]{ggplot2::geom_density()}} for the plot of residuals.
+Use to modify the default aesthetics of the density plot.}
+
+\item{resid_theme_aes}{A list of argument for
+\code{\link[ggplot2:theme]{ggplot2::theme()}} for the plots of residuals.
+Used to modify the default
+theme of the plot of residual.}
+
+\item{text_nopath}{String. Text to display in empty
+cells. Default is`"--".}
 }
 \value{
 A \code{ggplot2} plot, or an array of \code{ggplot2} plots.
 }
 \description{
 It generate the diagnostic plots based
-on the output of \code{\link[=fit_to_diag]{fit_to_diag()}}.
+on the output of \code{\link[=semdplot]{semdplot()}}.
 }
 \details{
 TODO: Should be converted to a method.
 
 It currently supports an output of any function
-supported by \code{\link[=fit_to_diag]{fit_to_diag()}}.
+supported by \code{\link[=semdplot]{semdplot()}}.
 
 TODO: Allow users to customize the plot.
 }

@@ -43,3 +43,51 @@ partial_to_long_i <- function(partial_i, what) {
       }
     stop("Invalid request.")
   }
+
+#' @title Residual-Only
+#'
+#' @description It extracts the residuals from
+#' the output of [semdplot()].
+#'
+#' @details
+#'
+#' It currently supports an output of any function
+#' supported by [semdplot()].
+#'
+#' TODO: Allow users to customize the plot.
+#'
+#' @return
+#' A data frame
+#'
+#' @param diag_info Argument description.
+#'
+#' @examples
+#' \donttest{
+#' # TODO: Prepare some examples.
+#' }
+#'
+#' @export
+#'
+
+partial_to_resid <- function(diag_info) {
+    partial0 <- sapply(unlist(diag_info, recursive = FALSE),
+                       function(x) {
+                           if (is.list(x)) {
+                               if (x$type == "residual") {
+                                   return(x)
+                                 } else {
+                                   return(NULL)
+                                 }
+                             } else {
+                               return(NULL)
+                             }
+                         })
+    partial0 <- partial0[!sapply(partial0, is.null)]
+    partial1 <- lapply(partial0, function(x) {
+                    out <- data.frame(x$y_resid)
+                    colnames(out) <- x$yname
+                    out
+                  })
+    out <- as.data.frame(partial1)
+    out
+  }

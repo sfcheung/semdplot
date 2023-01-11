@@ -16,7 +16,7 @@ on the output of casewise_residuals()."><!-- mathjax --><script src="https://cdn
     
     <a class="navbar-brand me-2" href="../index.html">semdplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@ on the output of <code><a href="casewise_residuals.html">casewise_residuals()</a
 <span>  resid_hist_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  resid_density_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  resid_theme_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  resid_ellipse_aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  text_nopath <span class="op">=</span> <span class="st">"--"</span>,</span>
 <span>  output_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"plot"</span>, <span class="st">"list"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -217,6 +218,12 @@ Use to modify the default aesthetics of the density plot.</p></dd>
 <code><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">ggplot2::theme()</a></code> for the plots of residuals.
 Used to modify the default
 theme of the plot of residual.</p></dd>
+
+
+<dt>resid_ellipse_aes</dt>
+<dd><p>A list of arguments for
+<code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">ggplot2::stat_ellipse()</a></code> for the plot of residuals.
+Use to modify the default aesthetics of the ellipse.</p></dd>
 
 
 <dt>text_nopath</dt>

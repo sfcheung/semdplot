@@ -1,6 +1,6 @@
 Package: semdplot
 Title: Diagnostic Plots for Structural Equation Models
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: c(
     person(given = "Shu Fai",
            family = "Cheung",
@@ -34,7 +34,6 @@ Config/testthat/edition: 3
 Imports:
     lavaan,
     stats,
-    GGally,
     ggplot2,
     patchwork,
     rlang

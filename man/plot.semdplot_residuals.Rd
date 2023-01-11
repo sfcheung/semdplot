@@ -24,6 +24,7 @@
   resid_hist_aes = list(),
   resid_density_aes = list(),
   resid_theme_aes = list(),
+  resid_ellipse_aes = list(),
   text_nopath = "--",
   output_type = c("plot", "list"),
   ...
@@ -118,6 +119,10 @@ Use to modify the default aesthetics of the density plot.}
 \code{\link[ggplot2:theme]{ggplot2::theme()}} for the plots of residuals.
 Used to modify the default
 theme of the plot of residual.}
+
+\item{resid_ellipse_aes}{A list of arguments for
+\code{\link[ggplot2:stat_ellipse]{ggplot2::stat_ellipse()}} for the plot of residuals.
+Use to modify the default aesthetics of the ellipse.}
 
 \item{text_nopath}{String. Text to display in empty
 cells. Default is`"--".}

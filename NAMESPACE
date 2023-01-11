@@ -2,6 +2,5 @@
 
 S3method(plot,semdplot_residuals)
 export(casewise_residuals)
-export(plot_resid)
 export(y_residuals)
 importFrom(rlang,.data)

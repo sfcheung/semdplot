@@ -100,6 +100,10 @@
 #' Used to modify the default
 #' theme of the plot of residual.
 #'
+#' @param resid_ellipse_aes A list of arguments for
+#' [ggplot2::stat_ellipse()] for the plot of residuals.
+#' Use to modify the default aesthetics of the ellipse.
+#'
 #' @param text_nopath String. Text to display in empty
 #' cells. Default is`"--".
 #'
@@ -138,18 +142,19 @@ plot.semdplot_residuals <- function(x,
                                     resid_hist_aes = list(),
                                     resid_density_aes = list(),
                                     resid_theme_aes = list(),
+                                    resid_ellipse_aes = list(),
                                     text_nopath = "--",
                                     output_type = c("plot", "list"),
                                     ...
                                   ) {
     what <- match.arg(what)
     output_type <- match.arg(output_type)
-    if (what == "residual") {
-        out <- plot_resid(c_resid = x,
-                          y = y_names,
-                          progress = FALSE)
-        return(out)
-      }
+    # if (what == "residual") {
+    #     out <- plot_resid(c_resid = x,
+    #                       y = y_names,
+    #                       progress = FALSE)
+    #     return(out)
+    #   }
     res0 <- partial_to_long(partial_list = x,
                             what = "resid")
     std0 <- partial_to_long(partial_list = x,
@@ -178,6 +183,11 @@ plot.semdplot_residuals <- function(x,
       } else {
         ylabels <- NULL
       }
+    # If what == "resid", keep only y-variables
+    if (what == "residual") {
+        xnames <- ynames
+        xlabels <- ylabels
+      }
     p <- length(xnames)
     q <- length(ynames)
 
@@ -189,6 +199,7 @@ plot.semdplot_residuals <- function(x,
     y_text_size <-  min(1, 0.75 * 6 / max(pq_range))
     b_size <- min(18, 3 * 6 / max(pq_range))
     point_size <- min(4, .5 * 6 / max(pq_range))
+    ellipse_linewidth <- max(min(1, .5 * 6 / max(pq_range)), .75)
     partial_point_aes_def <- list(na.rm = TRUE,
                                   size = ggplot2::rel(point_size))
     partial_point_aes <- utils::modifyList(partial_point_aes_def,
@@ -253,10 +264,31 @@ plot.semdplot_residuals <- function(x,
                                            resid_density_aes)
     resid_theme_aes <- utils::modifyList(partial_theme_aes_def,
                                          resid_theme_aes)
+    # For the low-level plot function, partial_ellipse_aes
+    # is used as the argument name.
+    # However, for the high-level function, ellipse should be
+    # plotted only for y-residuals. Therefore,
+    # resid_ellipse_aes is used as the name for the high-level
+    # functions for users.
+    resid_ellipse_aes_def <- list(type = "norm",
+                                  linetype = "solid",
+                                  linewidth = ellipse_linewidth,
+                                  color = "red",
+                                  alpha = .75,
+                                  na.rm = TRUE)
+    resid_ellipse_aes <- utils::modifyList(resid_ellipse_aes_def,
+                                           resid_ellipse_aes)
 
-    res0 <- res0[(res0$xname %in% x_names) |
-                 (res0$yname %in% y_names), ]
-    all_ranges <- get_xy_range(res0)
+    if (what == "partial") {
+        res0 <- res0[(res0$xname %in% xnames) |
+                     (res0$yname %in% ynames), ]
+        all_ranges <- get_xy_range(res0)
+      }
+    if (what == "residual") {
+        res0 <- res0[res0$xname == res0$yname, ]
+        res0 <- res0[(res0$xname %in% xnames), ]
+        all_ranges <- get_xy_range(res0, xy_same = TRUE)
+      }
     if (same_x_range) {
         xlim_i <- all_ranges$zx_range
       } else {
@@ -269,11 +301,31 @@ plot.semdplot_residuals <- function(x,
       }
     ps <- lapply(ynames, function(yi) {
             lapply(xnames, function(xi) {
-                res0i <- res0[(res0$xname == xi) &
-                              (res0$yname == yi), ]
-                std0i <- std0[(std0$xname == xi) &
-                              (std0$yname == yi), ]
-                # if ((xi == "x1") && (yi == "m12")) browser()
+                # For what == "partial"
+                if ((what == "partial") || (xi == yi)) {
+                    res0i <- res0[(res0$xname == xi) &
+                                  (res0$yname == yi), ]
+                    std0i <- std0[(std0$xname == xi) &
+                                  (std0$yname == yi), ]
+                  }
+                # For what == "residual" and off-diagonal
+                if ((what == "residual") && (xi != yi)) {
+                    res0i <- res0[(res0$xname == xi) &
+                                  (res0$yname == xi), ]
+                    res0iy <- res0[(res0$xname == yi) &
+                                   (res0$yname == yi), ]
+                    res0i$x_resid <- res0i$y_resid
+                    res0i$x_zresid <- res0i$y_zresid
+                    res0i$yname <- res0iy$yname
+                    res0i$y_resid <- res0iy$y_resid
+                    res0i$y_zresid <- res0iy$y_zresid
+                    std0i <- std0[(std0$xname == xi) &
+                                  (std0$yname == yi), ]
+                    std0i[1, "xname"] <- xi
+                    std0i[1, "yname"] <- yi
+                    std0i[1, "b"] <- NA
+                    std0i[1, "type"] <- "y_residual"
+                  }
                 if (nrow(res0i) == 0) {
                     return(grid::textGrob(text_nopath))
                   }
@@ -291,6 +343,7 @@ plot.semdplot_residuals <- function(x,
                             partial_reg_aes = partial_reg_aes,
                             partial_b_aes = partial_b_aes,
                             partial_theme_aes = partial_theme_aes,
+                            partial_ellipse_aes = resid_ellipse_aes,
                             added_point_aes = added_point_aes,
                             added_loess_aes = added_loess_aes,
                             added_reg_aes = added_reg_aes,
@@ -300,7 +353,8 @@ plot.semdplot_residuals <- function(x,
                             resid_density_aes = resid_density_aes,
                             resid_theme_aes = resid_theme_aes,
                             xlabel = xlabels[xi],
-                            ylabel = ylabels[yi]
+                            ylabel = ylabels[yi],
+                            what = what
                            )
               })
           })
@@ -345,7 +399,7 @@ plot.semdplot_residuals <- function(x,
 #' # TODO: Prepare some examples.
 #' }
 #'
-#' @export
+#' @noRd
 #'
 
 plot_resid <- function(c_resid,
@@ -353,24 +407,31 @@ plot_resid <- function(c_resid,
                        progress = FALSE,
                        ...
                      ) {
-    res0 <- y_residuals(c_resid)
-    ynames <- colnames(res0)
-    if (!is.null(y)) {
-        ynames <- intersect(ynames, y)
-        ynames <- stats::na.omit(ynames[match(y, ynames)])
-      }
-    if (length(ynames) == 0) stop("All y variable(s) not in the model.")
-    q <- length(ynames)
-    out <- GGally::ggpairs(data = res0[, ynames],
-                           progress = progress,
-                           ...)
-    out
+    stop("plot_resid() no longer used.")
+    # res0 <- y_residuals(c_resid)
+    # ynames <- colnames(res0)
+    # if (!is.null(y)) {
+    #     ynames <- intersect(ynames, y)
+    #     ynames <- stats::na.omit(ynames[match(y, ynames)])
+    #   }
+    # if (length(ynames) == 0) stop("All y variable(s) not in the model.")
+    # q <- length(ynames)
+    # out <- GGally::ggpairs(data = res0[, ynames],
+    #                        progress = progress,
+    #                        ...)
+    # out
   }
 
 
 #' @noRd
-get_xy_range <- function(res) {
-    tmp <- res[res$xname != res$yname, ]
+get_xy_range <- function(res, xy_same = FALSE) {
+    if (xy_same) {
+        tmp <- res
+        tmp$x_resid  <- tmp$y_resid
+        tmp$x_zresid <- tmp$y_zresid
+      } else {
+        tmp <- res[res$xname != res$yname, ]
+      }
     x_range <- range(tmp$x_resid, na.rm = TRUE)
     y_range <- range(tmp$y_resid, na.rm = TRUE)
     zx_range <- range(tmp$x_zresid, na.rm = TRUE)
@@ -396,6 +457,7 @@ plot_cres_i <- function(res,
                         partial_reg_aes = list(),
                         partial_b_aes = list(),
                         partial_theme_aes = list(),
+                        partial_ellipse_aes = list(),
                         added_point_aes = list(),
                         added_loess_aes = list(),
                         added_reg_aes = list(),
@@ -405,7 +467,8 @@ plot_cres_i <- function(res,
                         resid_density_aes = list(),
                         resid_theme_aes = list(),
                         xlabel = NULL,
-                        ylabel = NULL
+                        ylabel = NULL,
+                        what
                        ) {
    if (std$type == "residual") {
         out <- plot_cres_i_resid(res = res,
@@ -421,7 +484,12 @@ plot_cres_i <- function(res,
         return(out)
         # return(grid::textGrob("Residual"))
       }
-    if (std$type == "partial") {
+    # If what = "residual",
+    # then std$type will never be "partial".
+    # The plots are for residuals of y-variables.
+    # No need to set "what when calling plot_cres_i_partial().
+    if ((std$type == "partial") ||
+        (std$type == "y_residual")) {
         out <- plot_cres_i_partial(res = res,
                                    std = std,
                                    x = x,
@@ -433,6 +501,7 @@ plot_cres_i <- function(res,
                                    partial_reg_aes = partial_reg_aes,
                                    partial_b_aes = partial_b_aes,
                                    partial_theme_aes = partial_theme_aes,
+                                   partial_ellipse_aes = partial_ellipse_aes,
                                    xlabel = xlabel,
                                    ylabel = ylabel
                                   )
@@ -472,9 +541,15 @@ plot_cres_i_partial <- function(res,
                                 partial_reg_aes = list(),
                                 partial_b_aes = list(),
                                 partial_theme_aes = list(),
+                                partial_ellipse_aes = list(),
                                 xlabel = NULL,
                                 ylabel = NULL
                                ) {
+    # If std$type == "y_residual",
+    # then the plot is a plot of residuals of y-variables,
+    # not a partial plot.
+    # - The abline is not drawn.
+    # - An ellipse is drawn.
     if (!is.null(partial_ylim)) {
         b_pos_y <- partial_ylim[1] + .95 * (partial_ylim[2] - partial_ylim[1])
       } else {
@@ -504,21 +579,28 @@ plot_cres_i_partial <- function(res,
                                   se = FALSE),
                              partial_loess_aes)
     p <- p + do.call(ggplot2::geom_smooth, tmp)
-    tmp <- utils::modifyList(list(slope = std$b,
-                                  intercept = 0,
-                                  color = "blue",
-                                  linewidth = 1),
-                             partial_reg_aes)
-    p <- p + do.call(ggplot2::geom_abline, tmp)
-    tmp <- utils::modifyList(list(geom = "text",
-                                  x = b_pos_x,
-                                  y = b_pos_y,
-                                  label = formatC(std$b,
-                                                  digits = 2,
-                                                  format = "f"),
-                                  size = 5),
-                             partial_b_aes)
-    p <- p + do.call(ggplot2::annotate, tmp)
+    if (std$type %in% c("partial", "added")) {
+        tmp <- utils::modifyList(list(slope = std$b,
+                                      intercept = 0,
+                                      color = "blue",
+                                      linewidth = 1),
+                                partial_reg_aes)
+        p <- p + do.call(ggplot2::geom_abline, tmp)
+        tmp <- utils::modifyList(list(geom = "text",
+                                      x = b_pos_x,
+                                      y = b_pos_y,
+                                      label = formatC(std$b,
+                                                      digits = 2,
+                                                      format = "f"),
+                                      size = 5),
+                                partial_b_aes)
+        p <- p + do.call(ggplot2::annotate, tmp)
+      }
+    if (std$type == "y_residual") {
+        tmp <- utils::modifyList(list(),
+                                 partial_ellipse_aes)
+        p <- p + do.call(ggplot2::stat_ellipse, tmp)
+      }
     tmp <- utils::modifyList(list(panel.background =
                                     ggplot2::element_rect(fill = "grey90")),
                              partial_theme_aes)

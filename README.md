@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/sfcheung/semdplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semdplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.0.9001, updated on 2023-01-08, [release history](https://sfcheung.github.io/semdplot/news/index.html))
+(Version 0.0.9002, updated on 2023-01-11, [release history](https://sfcheung.github.io/semdplot/news/index.html))
 
 # semdplot
 
@@ -17,6 +17,12 @@ equation modeling (SEM).
 
 This package is still **experimental**. Please do not install it for now.
 
-Nevertheless, suggestions are also welcomed:
+If you want to try this experimental work-in-progress version, you can install it:
+
+```r
+remotes::install_github("sfcheung/semdplot")
+```
+
+Suggestions are also welcomed:
 
 https://github.com/sfcheung/semdplot/issues

@@ -143,7 +143,7 @@ produce only plots for residuals of endogenous variables:
 ```{r}
 p <- plot(fit_res_add,
           what = "residual")
-print(p)
+plot(p)
 ```
 
 Users can also use `y_names` to select only some of the

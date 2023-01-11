@@ -19,7 +19,6 @@ reference:
 - contents:
   - casewise_residuals
   - plot.semdplot_residuals
-  - plot_resid
 - title: Others
   desc: Helper functions.
 - contents:

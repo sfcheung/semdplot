@@ -6,9 +6,9 @@
 [![R-CMD-check](https://github.com/sfcheung/semdplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semdplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.0.9002, updated on 2023-01-11, [release history](https://sfcheung.github.io/semdplot/news/index.html))
+(Version 0.0.9003, updated on 2023-03-12, [release history](https://sfcheung.github.io/semdplot/news/index.html))
 
-# semdplot
+# semdplot <img src="man/figures/logo.png" align="right" height="150" />
 
 This package is for generating diagnostic plots in structural
 equation modeling (SEM).

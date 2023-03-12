@@ -1,8 +1,22 @@
 destination: docs
 
 url: https://sfcheung.github.io/semdplot/
+
 template:
   bootstrap: 5
+  bootswatch: flatly
+  theme: a11y-light
+  bslib:
+    pkgdown-nav-height: 100px
+    bg: "#EFEFEF"
+    fg: "#000000"
+    primary: "#EC1857"
+    base_font: {google: "Alegreya Sans"}
+    heading_font: {google: "Alegreya Sans"}
+    code_font: {google: "Courier Prime"}
+
+navbar:
+  bg: primary
 
 articles:
 - title: Articles

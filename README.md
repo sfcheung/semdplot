@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/sfcheung/semdplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/semdplot/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.0.9003, updated on 2023-03-12, [release history](https://sfcheung.github.io/semdplot/news/index.html))
+(Version 0.0.0.9004, updated on 2023-06-22, [release history](https://sfcheung.github.io/semdplot/news/index.html))
 
 # semdplot <img src="man/figures/logo.png" align="right" height="150" />
 
